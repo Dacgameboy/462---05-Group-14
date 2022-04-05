@@ -92,14 +92,13 @@ namespace TechnicalServices::Persistence
   }
 
 
-  std::vector<AccountCredentials> SimpleDB::findReportedUsers()
+  std::vector<AccountCredentials> SimpleDB::findReportedUsers(std::string date)
   {
     static std::vector<AccountCredentials> storedUsers =
     {
     // Username    Pass Phrase         Authorized roles
-      {"Tom",     "CPSC 462 Rocks!",  {"JobSeeker", "Employer"},       "000000001"},
-      {"Barbara", "Why am I here?",   {"JobSeeker"                  }, "000000002"},
-      {"admin462",  "462FUN!",        {"Administrator"},               "000000000"}
+      {"Andres",     "CalState462",  {"JobSeeker", "Employer"},       "000000001"},
+      {"Chris",       "manidk462",   {"JobSeeker"            },       "000000002"},
     };
 
     return storedUsers;
@@ -109,10 +108,10 @@ namespace TechnicalServices::Persistence
   {
     static std::vector<AccountCredentials> storedUsers =
     {
-    // Username    Pass Phrase         Authorized roles
-      {"Tom",     "CPSC 462 Rocks!",  {"JobSeeker", "Employer"},       "000000001"},
-      {"Barbara", "Why am I here?",   {"JobSeeker"                  }, "000000002"},
-      {"admin462",  "462FUN!",        {"Administrator"},               "000000000"}
+    // Username    Pass Phrase         Authorized roles                Account_ID
+      {"Andres",     "CalState462",  {"JobSeeker", "Employer"},       "000000001"},
+      {"Chris",       "manidk462",   {"JobSeeker"                  }, "000000002"},
+      {"admin462",  "462FUN!",       {"Administrator"},               "000000000"}
     };
 
     for( const auto & user : storedUsers ) if( user.userName == name ) return user;

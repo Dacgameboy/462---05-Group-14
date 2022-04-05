@@ -7,17 +7,32 @@
 
 namespace
 {
+
+  using TechnicalServices::Persistence::AccountCredentials;
+
   #define STUB(functionName)  std::any functionName(Domain::Session::SessionBasic & , const std::vector<std::string> & ) \
                               {return {};}
   STUB(getUserReport)
   STUB(removeAccount)
+  STUB(getAccountInfo)
+  STUB(setUsername)
+  STUB(setPassword)
+  STUB(listJobAdvertisements)
+  STUB(getJobAdvertisements)
+  STUB(setQualifications)
+
+
 
   std::any listReportedUsers ( Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
   {
-    std::string results = "Date \"" + args[0] + "\" searched by \"" + session._credentials.userName + '"';
-    session._logger << "search reported users from: " + results;
+    auto &          persistentData    = TechnicalServices::Persistence::PersistenceHandler::instance();
+    std::vector<AccountCredentials> results = persistentData.findReportedUsers(args[0]);
+    session._logger << "search reported users from: " + args[0];
     return {results};
   }
+
+
+  //getuserreport
 }
 
 namespace Domain::Session
@@ -77,7 +92,10 @@ namespace Domain::Session
   {
     _actionDispatch = {{"List Reported Users", listReportedUsers},
                        {"Get User Report", getUserReport },
-                       {"Remove Account", removeAccount}};
+                       {"Remove Account", removeAccount},
+                       {"List Job Advertisements",listJobAdvertisements },
+                       {"Get Job Advertisements", getJobAdvertisements},
+                       {"Set Qualifications", setQualifications}};
   }
 
   EmployerSession::EmployerSession(const AccountCredentials & credentials) : SessionBasic("Employer", credentials)
@@ -87,7 +105,9 @@ namespace Domain::Session
 
   JobSeekerSession::JobSeekerSession(const AccountCredentials & credentials) : SessionBasic("JobSeeker", credentials)
   {
-
+    _actionDispatch = {{"Get Account Info", getAccountInfo},
+                       {"Set Username", setUsername},
+                       {"Set Password", setPassword}};
   }
 
   GeneralSession::GeneralSession(const AccountCredentials & credentials) : SessionBasic("General", credentials)
