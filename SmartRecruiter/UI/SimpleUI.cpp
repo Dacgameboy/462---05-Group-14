@@ -8,7 +8,7 @@
 #include <string>      // string, getline()
 #include <vector>
 
-#include "Domain/Library/Books.hpp"    // Include for now - will replace next increment
+#include "Domain/Account/Account.hpp"    // Include for now - will replace next increment
 #include "Domain/Session/SessionHandler.hpp"
 
 #include "TechnicalServices/Logging/LoggerHandler.hpp"
@@ -21,7 +21,7 @@ namespace UI
 {
   // Default constructor
   SimpleUI::SimpleUI()
-  : _bookHandler   ( std::make_unique<Domain::Library::Books>()                     ),   // will replace these with factory calls in the next increment
+  : _accountHandler   ( std::make_unique<Domain::Account::Account>()                     ),   // will replace these with factory calls in the next increment
     _loggerPtr     ( TechnicalServices::Logging::LoggerHandler::create()            ),
     _persistentData( TechnicalServices::Persistence::PersistenceHandler::instance() )
   {
@@ -48,7 +48,7 @@ namespace UI
 
 
     // 2) Present login screen to user and get username, password, and valid role
-    Domain::Session::UserCredentials credentials  = {"", "", {""}};           // ensures roles[0] exists
+    Domain::Session::AccountCredentials credentials  = {"", "", {""}};           // ensures roles[0] exists
     auto &                           selectedRole = credentials.roles[0];     // convenience alias
 
     std::unique_ptr<Domain::Session::SessionHandler> sessionControl;
@@ -91,46 +91,44 @@ namespace UI
     // 4) Fetch functionality options for this role
     do
     {
-      auto        commands = sessionControl->getCommands();
+      auto        actions = sessionControl->getActions();
       std::string selectedCommand;
       unsigned    menuSelection;
 
       do
       {
-        for( unsigned i = 0; i != commands.size(); ++i ) std::cout << std::setw( 2 ) << i << " - " << commands[i] << '\n';
-        std::cout << std::setw( 2 ) << commands.size() << " - " << "Quit\n";
+        for( unsigned i = 0; i != actions.size(); ++i ) std::cout << std::setw( 2 ) << i << " - " << actions[i] << '\n';
+        std::cout << std::setw( 2 ) << actions.size() << " - " << "Quit\n";
 
-        std::cout << "  action (0-" << commands.size() << "): ";
+        std::cout << "  action (0-" << actions.size() << "): ";
         std::cin >> menuSelection;
-      } while( menuSelection > commands.size() );
+      } while( menuSelection > actions.size() );
 
-      if( menuSelection == commands.size() ) break;
+      if( menuSelection == actions.size() ) break;
 
-      selectedCommand = commands[menuSelection];
+      selectedCommand = actions[menuSelection];
       _logger << "Command selected \"" + selectedCommand + '"';
 
 
       /******************************************************************************************************************************
       **  5) The user interface will collect relevant information to execute the chosen command.  This section requires the UI to
-      **     know what information to collect, and hence what the available commands are.  Our goal is loose (minimal) coupling, not
+      **     know what information to collect, and hence what the available actions are.  Our goal is loose (minimal) coupling, not
       **     no coupling. This can be achieved in a variety of ways, but one common way is to pass strings instead of strong typed
       **     parameters.
       ******************************************************************************************************************************/
-      if( selectedCommand == "Checkout Book" )
+      if( selectedCommand == "List Reported Users" )
       {
-        std::vector<std::string> parameters( 3 );
+        std::vector<std::string> parameters( 1 );
 
-        std::cout << " Enter book's title:  ";  std::cin >> std::ws;  std::getline( std::cin, parameters[0] );
-        std::cout << " Enter book's author: ";  std::cin >> std::ws;  std::getline( std::cin, parameters[1] );
-        std::cout << " Enter book's ISBN:   ";  std::cin >> std::ws;  std::getline( std::cin, parameters[2] );
+        std::cout << " Enter date **/**/****:  ";  std::cin >> std::ws;  std::getline( std::cin, parameters[0] );
 
-        auto results = sessionControl->executeCommand( selectedCommand, parameters );
+        auto results = sessionControl->executeAction( selectedCommand, parameters );
         if( results.has_value() ) _logger << "Received reply: \"" + std::any_cast<const std::string &>( results ) + '"';
       }
 
       else if( selectedCommand == "Another command" ) /* ... */ {}
 
-      else sessionControl->executeCommand( selectedCommand, {} );
+      else sessionControl->executeAction( selectedCommand, {} );
     } while( true );
 
     _logger << "Ending session and terminating";

@@ -12,7 +12,7 @@ namespace Domain::Account
       ~Account() noexcept override;
   };
 
-  inline Books::~Books() noexcept
+  inline Account::~Account() noexcept
   {}
-    
+
 }
