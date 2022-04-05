@@ -135,7 +135,20 @@ namespace UI
           std::cout << std::endl;
         }
       }
+      else if( selectedCommand == "Remove User Account")
+      {
+        std::vector<std::string> parameters(2);
 
+        std::cout << "Enter Account ID \"*********\":"; std::cin >> std::ws; std::getline(std::cin, parameters[0]);
+        std::cout << "Enter Reason for removal:"; std::cin >> std::ws; std::getline(std::cin, parameters[1]);
+
+        auto results = sessionControl->executeAction( selectedCommand, parameters );
+        
+        if( results.has_value() )
+        {
+          _logger << "Success";
+        }
+      }
       else if( selectedCommand == "Another command" ) /* ... */ {}
 
       else sessionControl->executeAction( selectedCommand, {} );

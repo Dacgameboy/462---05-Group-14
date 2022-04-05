@@ -49,6 +49,7 @@ namespace TechnicalServices::Persistence
     _logger << "Simple DB being used and has been successfully initialized";
 
 
+
     // Let's look for an adaptation data file, and if found load the contents.  Otherwise create some default values.
     std::ifstream adaptationDataFile( "Library_System_AdaptableData.dat", std::ios::binary );
 
@@ -75,8 +76,26 @@ namespace TechnicalServices::Persistence
     }
   }
 
+  struct UserBase{
 
+      std::vector<AccountCredentials> storedUsers =
+      {
+      // Username    Pass Phrase         Authorized roles                Account_ID
+        {"Andres",     "CalState462",  {"JobSeeker", "Employer"},       "000000001"},
+        {"Chris",       "manidk462",   {"JobSeeker"                  }, "000000002"},
+        {"admin462",  "462FUN!",       {"Administrator"},               "000000000"}
+      };
 
+      std::vector<AccountCredentials> reportedUsers =
+      {
+      // Username    Pass Phrase         Authorized roles                Account_ID
+        {"Andres",     "CalState462",  {"JobSeeker", "Employer"},       "000000001"},
+        {"Chris",       "manidk462",   {"JobSeeker"            },       "000000002"},
+      };
+
+  };
+
+  static UserBase Users;
 
   SimpleDB::~SimpleDB() noexcept
   {
@@ -91,31 +110,35 @@ namespace TechnicalServices::Persistence
     return { "JobSeeker", "Employer", "Administrator"};
   }
 
+  bool SimpleDB::removeAccount(std::string accountID)
+  {
+    for(auto user = Users.reportedUsers.begin(); user != Users.reportedUsers.end(); ++user)
+    {
+      if( user->accountID == accountID )
+      {
+        Users.reportedUsers.erase(user);
+        return true;
+      }
+    }
+    // Name not found, log the error and throw something
+    std::string message = __func__;
+    message += " attempt to find and remove user with ID \"" + accountID + "\" failed";
+
+    _logger << message;
+    throw PersistenceHandler::NoSuchUser( message );
+  }
 
   std::vector<AccountCredentials> SimpleDB::findReportedUsers(std::string date)
   {
     date = "";
-    static std::vector<AccountCredentials> storedUsers =
-    {
-    // Username    Pass Phrase         Authorized roles
-      {"Andres",     "CalState462",  {"JobSeeker", "Employer"},       "000000001"},
-      {"Chris",       "manidk462",   {"JobSeeker"            },       "000000002"},
-    };
 
-    return storedUsers;
+    return Users.reportedUsers;
   }
 
   AccountCredentials SimpleDB::findCredentialsByName( const std::string & name )
   {
-    static std::vector<AccountCredentials> storedUsers =
-    {
-    // Username    Pass Phrase         Authorized roles                Account_ID
-      {"Andres",     "CalState462",  {"JobSeeker", "Employer"},       "000000001"},
-      {"Chris",       "manidk462",   {"JobSeeker"                  }, "000000002"},
-      {"admin462",  "462FUN!",       {"Administrator"},               "000000000"}
-    };
 
-    for( const auto & user : storedUsers ) if( user.userName == name ) return user;
+    for( const auto & user : Users.storedUsers ) if( user.userName == name ) return user;
 
     // Name not found, log the error and throw something
     std::string message = __func__;

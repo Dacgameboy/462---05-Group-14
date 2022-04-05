@@ -40,6 +40,7 @@ namespace TechnicalServices::Persistence
       virtual std::vector<std::string> findRoles()                                       = 0;   // Returns list of all legal roles
       virtual AccountCredentials          findCredentialsByName( const std::string & name ) = 0;   // Returns credentials for specified user, throws NoSuchUser if user not found
       virtual std::vector<AccountCredentials> findReportedUsers(std::string date) = 0;
+      virtual bool removeAccount(std::string accountID) = 0;
 
       // Adaptation Data read only access.  Adaptation data is a Key/Value pair
       // Throws NoSuchProperty

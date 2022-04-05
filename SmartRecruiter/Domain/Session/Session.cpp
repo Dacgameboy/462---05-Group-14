@@ -13,7 +13,6 @@ namespace
   #define STUB(functionName)  std::any functionName(Domain::Session::SessionBasic & , const std::vector<std::string> & ) \
                               {return {};}
   STUB(getUserReport)
-  STUB(removeAccount)
   STUB(getAccountInfo)
   STUB(setUsername)
   STUB(setPassword)
@@ -28,6 +27,14 @@ namespace
     auto &          persistentData    = TechnicalServices::Persistence::PersistenceHandler::instance();
     auto results = persistentData.findReportedUsers(args[0]);
     session._logger << "search reported users from: " + args[0];
+    return {results};
+  }
+
+  std::any removeAccount ( Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
+  {
+    auto &          persistentData    = TechnicalServices::Persistence::PersistenceHandler::instance();
+    auto results = persistentData.removeAccount(args[0]);
+    if(results) session._logger << "Removed account with ID: " + args[0] + " with justification: " + args[1];
     return {results};
   }
 
@@ -92,7 +99,7 @@ namespace Domain::Session
   {
     _actionDispatch = {{"List Reported Users", listReportedUsers},
                        {"Get User Report", getUserReport },
-                       {"Remove Account", removeAccount},
+                       {"Remove User Account", removeAccount},
                        {"List Job Advertisements",listJobAdvertisements },
                        {"Get Job Advertisements", getJobAdvertisements},
                        {"Set Qualifications", setQualifications}};
