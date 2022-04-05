@@ -14,7 +14,7 @@
 #include "TechnicalServices/Logging/LoggerHandler.hpp"
 #include "TechnicalServices/Persistence/PersistenceHandler.hpp"
 
-
+  using TechnicalServices::Persistence::AccountCredentials;
 
 
 namespace UI
@@ -48,7 +48,7 @@ namespace UI
 
 
     // 2) Present login screen to user and get username, password, and valid role
-    Domain::Session::AccountCredentials credentials  = {"", "", {""}};           // ensures roles[0] exists
+    Domain::Session::AccountCredentials credentials  = {"", "", {""}, ""};           // ensures roles[0] exists
     auto &                           selectedRole = credentials.roles[0];     // convenience alias
 
     std::unique_ptr<Domain::Session::SessionHandler> sessionControl;
@@ -123,7 +123,17 @@ namespace UI
         std::cout << " Enter date **/**/****:  ";  std::cin >> std::ws;  std::getline( std::cin, parameters[0] );
 
         auto results = sessionControl->executeAction( selectedCommand, parameters );
-        if( results.has_value() ) _logger << "Received reply: \"" + std::any_cast<const std::string &>( results ) + '"';
+        if( results.has_value() )
+        {
+          _logger << "Received List of Accounts";
+          std::cout << "\nUsername        Account ID  \n";
+          for(AccountCredentials credential :std::any_cast<std::vector<AccountCredentials>>( results ))
+          {
+
+            std::cout << credential.userName + "          " + credential.accountID + "\n";
+          }
+          std::cout << std::endl;
+        }
       }
 
       else if( selectedCommand == "Another command" ) /* ... */ {}

@@ -26,7 +26,7 @@ namespace
   std::any listReportedUsers ( Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
   {
     auto &          persistentData    = TechnicalServices::Persistence::PersistenceHandler::instance();
-    std::vector<AccountCredentials> results = persistentData.findReportedUsers(args[0]);
+    auto results = persistentData.findReportedUsers(args[0]);
     session._logger << "search reported users from: " + args[0];
     return {results};
   }
@@ -81,7 +81,7 @@ namespace Domain::Session
     if( results.has_value() )
     {
       // The type of result depends on function called.  Let's assume strings for now ...
-      _logger << "Responding with: \"" + std::any_cast<const std::string &>( results ) + '"';
+      //_logger << "Responding with: \"" + std::any_cast<const std::string &>( results ) + '"';
     }
 
     return results;

@@ -94,6 +94,7 @@ namespace TechnicalServices::Persistence
 
   std::vector<AccountCredentials> SimpleDB::findReportedUsers(std::string date)
   {
+    date = "";
     static std::vector<AccountCredentials> storedUsers =
     {
     // Username    Pass Phrase         Authorized roles

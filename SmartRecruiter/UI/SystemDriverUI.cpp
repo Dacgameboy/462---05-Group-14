@@ -34,7 +34,7 @@ namespace UI
     {
       _logger << "Starting scenario 1: Checkout Book";
 
-      auto session  = Domain::Session::SessionHandler::createSession( {"Tom", "CPSC 462 Rocks!", {"Borrower"}} );
+      auto session  = Domain::Session::SessionHandler::createSession( {"Tom", "CPSC 462 Rocks!", {"Borrower"}, ""} );
       auto commands = session->getActions();
       auto results  = session->executeAction( "Checkout Book", {"Applied UML and Patterns", "Larman", "0-13-148906-2"} );
       //session->singOff();
