@@ -9,47 +9,52 @@
 
 int main( /*int argc, char argv[] */ )
 {
-  try
+  char response;
+  do
   {
-    std::cout << "\nSmart Recruiter system initializing ...\n\n";
-
-    // Smart pointer (for proper, exception safe memory management) to interface set to new instance of a configurable
-    // implementation of the interface.
-    auto userInterface = UI::UserInterfaceHandler::createUI();
-
-    std::cout << "\nInitialization completed successfully\n";
-
-    char response;
-    do
+    try
     {
-      std::cout << "Ready to transition into Operational State? (Q/Y/N) ";
-      std::cin >> response;
-      response = std::toupper( response, std::locale() );
-    } while( response != 'Y' && response != 'Q' );
+      std::cout << "\nSmart Recruiter system initializing ...\n\n";
 
-    if( response == 'Y' ) userInterface->launch();
+      // Smart pointer (for proper, exception safe memory management) to interface set to new instance of a configurable
+      // implementation of the interface.
+      auto userInterface = UI::UserInterfaceHandler::createUI();
 
-
-    std::cout << "\nProgram complete, initiating shutdown\n";
-  }
+      std::cout << "\nInitialization completed successfully\n";
 
 
+      do
+      {
+        std::cout << "Ready to transition into Operational State? (Q/Y/N) ";
+        std::cin >> response;
+        response = std::toupper( response, std::locale() );
+      } while( response != 'Y' && response != 'Q' );
 
-  catch( const std::bad_alloc & ex )
-  {
-    std::cerr << "Fatal:  Uncaught memory allocation exception\n\n"
-              << ex.what() << '\n';
-  }
+      if( response == 'Y' ) userInterface->launch();
 
-  catch( const std::exception & ex )
-  {
-    std::cerr << "Fatal:  Uncaught standard exception\n"
-              << typeid( ex ).name() << '\n'
-              << ex.what() << '\n';
-  }
 
-  catch( ... )
-  {
-    std::cerr << "Fatal:  Uncaught (unknown type) exception\n";
-  }
+      std::cout << "\nProgram complete, initiating shutdown\n";
+    }
+
+
+
+    catch( const std::bad_alloc & ex )
+    {
+      std::cerr << "Fatal:  Uncaught memory allocation exception\n\n"
+                << ex.what() << '\n';
+    }
+
+    catch( const std::exception & ex )
+    {
+      std::cerr << "Fatal:  Uncaught standard exception\n"
+                << typeid( ex ).name() << '\n'
+                << ex.what() << '\n';
+    }
+
+    catch( ... )
+    {
+      std::cerr << "Fatal:  Uncaught (unknown type) exception\n";
+    }
+  }while(response != 'Q');
+
 }
