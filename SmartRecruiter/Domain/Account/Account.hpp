@@ -9,6 +9,18 @@ namespace Domain::Account
     public:
       using AccountHandler::AccountHandler;
 
+      bool removeAccount(std::string accountID) override
+      {
+        auto &          persistentData    = TechnicalServices::Persistence::PersistenceHandler::instance();
+        return persistentData.removeAccount(accountID);
+      }
+
+      std::vector<AccountCredentials> listReportedUsers(std::string date) override
+      {
+        auto &          persistentData    = TechnicalServices::Persistence::PersistenceHandler::instance();
+        return persistentData.findReportedUsers(date);
+      }
+
       ~Account() noexcept override;
   };
 

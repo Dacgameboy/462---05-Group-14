@@ -8,6 +8,7 @@
 #include <algorithm>
 
 #include "TechnicalServices/Persistence/PersistenceHandler.hpp"
+#include "Domain/Account/AccountHandler.hpp"
 
 namespace Domain::Session
 {

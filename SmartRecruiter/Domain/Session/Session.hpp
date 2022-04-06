@@ -7,6 +7,7 @@
 
 #include "Domain/Session/SessionHandler.hpp"
 #include "TechnicalServices/Logging/LoggerHandler.hpp"
+#include "Domain/Account/Account.hpp"
 
 
 
