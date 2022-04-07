@@ -1,3 +1,6 @@
+//Session Handler Interface - 462 Group 14
+//session handler is responsible for taking in commands from the UI, and distributing them to the other domain handlers
+//it also handles initial login and session creation to retrieve available actions based on session type
 #pragma once
 
 #include <string>
@@ -25,8 +28,8 @@ namespace Domain::Session
 
 
       //Operations
-      virtual std::vector<std::string> getActions() = 0;
-      virtual std::any executeAction(const std::string & action, const std::vector<std::string> & args) = 0;
+      virtual std::vector<std::string> getActions() = 0;//gets action options taking in session type
+      virtual std::any executeAction(const std::string & action, const std::vector<std::string> & args) = 0;//executes a selected action
 
       virtual ~SessionHandler() noexcept = 0;
 

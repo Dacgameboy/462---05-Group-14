@@ -15,7 +15,7 @@
 #include "TechnicalServices/Persistence/PersistenceHandler.hpp"
 
   using TechnicalServices::Persistence::AccountCredentials;
-
+  using TechnicalServices::Persistence::JobCredentials;
 
 namespace UI
 {
@@ -143,13 +143,69 @@ namespace UI
         std::cout << "Enter Reason for removal:"; std::cin >> std::ws; std::getline(std::cin, parameters[1]);
 
         auto results = sessionControl->executeAction( selectedCommand, parameters );
-        
+
         if( results.has_value() )
         {
           _logger << "Success";
         }
       }
-      else if( selectedCommand == "Another command" ) /* ... */ {}
+      else if( selectedCommand == "Get Account Info" )
+      {
+        std::vector<std::string> parameters(1);
+        parameters[0] = "000000002";
+        auto results = sessionControl->executeAction( selectedCommand, parameters );
+        AccountCredentials credential = std::any_cast<AccountCredentials>(results);
+        std::cout <<"Username: " << credential.userName << "\nPass phrase: " << credential.passPhrase << "\nAccount ID: " << credential.accountID << "\n\n";
+      }
+      else if( selectedCommand == "Get User Report" )
+      {
+        std::vector<std::string> parameters(1);
+        std::cout << "Enter Account ID \"*********\":"; std::cin >> std::ws; std::getline(std::cin, parameters[0]);
+        auto results = sessionControl->executeAction( selectedCommand, parameters );
+        std::cout << std::any_cast<std::string>(results) << "\n";
+      }
+      else if(selectedCommand == "Set Username")
+      {
+        std::vector<std::string> parameters(1);
+        std::cout << "Enter New Username:"; std::cin >> std::ws; std::getline(std::cin, parameters[0]);
+        auto results = sessionControl->executeAction( selectedCommand, parameters );
+        std::cout << std::any_cast<std::string>(results);
+      }
+      else if(selectedCommand == "Set Password")
+      {
+        std::vector<std::string> parameters(1);
+        std::cout << "Enter New Password:"; std::cin >> std::ws; std::getline(std::cin, parameters[0]);
+        auto results = sessionControl->executeAction( selectedCommand, parameters );
+        std::cout << std::any_cast<std::string>(results);
+      }
+      else if(selectedCommand == "List Jobs")
+      {
+        std::vector<std::string> parameters(1);
+        parameters[0] = "";
+        auto results = sessionControl->executeAction( selectedCommand, parameters );
+        std::cout << "Employer                  Position                      Status                     Job ID\n";
+        for(JobCredentials credential :std::any_cast<std::vector<JobCredentials>>( results ))
+        {
+
+          std::cout << credential.employer + "                  " + credential.position + "                      " + credential.status + "                     " + credential.jobID + "\n";
+        }
+        std::cout << std::endl;
+      }
+      else if(selectedCommand == "Get Job Listing report")
+      {
+        std::vector<std::string> parameters(1);
+        std::cout << "Enter Job ID:"; std::cin >> std::ws; std::getline(std::cin, parameters[0]);
+        auto results = sessionControl->executeAction( selectedCommand, parameters );
+        std::cout << std::any_cast<std::string>(results);
+      }
+      else if(selectedCommand == "Remove Job Listing")
+      {
+        std::vector<std::string> parameters(2);
+        std::cout << "Enter Job ID:"; std::cin >> std::ws; std::getline(std::cin, parameters[0]);
+        std::cout << "Enter Reason:"; std::cin >> std::ws; std::getline(std::cin, parameters[1]);
+        auto results = sessionControl->executeAction( selectedCommand, parameters );
+        std::cout << std::any_cast<std::string>(results) << "\n";
+      }
 
       else sessionControl->executeAction( selectedCommand, {} );
     } while( true );

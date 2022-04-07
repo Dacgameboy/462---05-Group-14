@@ -16,7 +16,21 @@ namespace TechnicalServices::Persistence
     std::string               accountID;
   };
 
+  struct UserReport
+  {
+    std::string account_ID;
+    std::string report;
 
+   };
+
+   struct JobCredentials
+  {
+  std::string               employer;
+  std::string               position;
+  std::string               jobID;
+  std::string               status;
+
+  };
 
 
   // Persistence Package within the Technical Services Layer Abstract class
@@ -41,6 +55,13 @@ namespace TechnicalServices::Persistence
       virtual AccountCredentials          findCredentialsByName( const std::string & name ) = 0;   // Returns credentials for specified user, throws NoSuchUser if user not found
       virtual std::vector<AccountCredentials> findReportedUsers(std::string date) = 0;
       virtual bool removeAccount(std::string accountID) = 0;
+      virtual AccountCredentials findCredentialsByID(const std::string & accountID) = 0;
+      virtual std::string findUserReport(const std::string & accountID) = 0;
+      virtual std::string setUsername(std::string accountID, std::string username) = 0;
+      virtual std::string setPassword(std::string accountID, std::string password)  = 0;
+      virtual std::vector<JobCredentials> listJobs(std::string company) = 0;
+      virtual std::string getJobListingReport(std::string jobID) = 0;
+      virtual std::string removeJobListing(std::string jobID) = 0;
 
       // Adaptation Data read only access.  Adaptation data is a Key/Value pair
       // Throws NoSuchProperty

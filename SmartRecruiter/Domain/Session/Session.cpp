@@ -13,10 +13,7 @@ namespace
 
   #define STUB(functionName)  std::any functionName(Domain::Session::SessionBasic & , const std::vector<std::string> & ) \
                               {return {};}
-  STUB(getUserReport)
-  STUB(getAccountInfo)
-  STUB(setUsername)
-  STUB(setPassword)
+
   STUB(listJobAdvertisements)
   STUB(getJobAdvertisements)
   STUB(setQualifications)
@@ -40,8 +37,62 @@ namespace
     return {results};
   }
 
+  std::any getAccountInfo( Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
+  {
+    auto account = new Domain::Account::Account;
+    auto results = account->getAccountInfo(args[0]);
+    session._logger << "Retrieved Account info with ID: " + args[0];
+    return {results};
+  }
 
-  //getuserreport
+  std::any getUserReport( Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
+  {
+    auto account = new Domain::Account::Account;
+    auto results = account->getUserReport(args[0]);
+    session._logger << "Retrieved user report of ID: " + args[0];
+    return {results};
+  }
+
+  std::any setUsername(Domain::Session::SessionBasic & session, const std::vector<std::string> & args)
+  {
+    auto account = new Domain::Account::Account;
+    auto results = account->setUsername(args[0]);
+    session._logger << "Changed Username to: " + args[0];
+    return {results};
+  }
+
+  std::any setPassword(Domain::Session::SessionBasic & session, const std::vector<std::string> & args)
+  {
+    auto account = new Domain::Account::Account;
+    auto results = account->setPassword(args[0]);
+    session._logger << "Changed Password to: " + args[0];
+    return {results};
+  }
+
+  std::any listJobs ( Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
+  {
+    auto job = new Domain::Job::JobOpening;
+    auto results = job->listJobs(args[0]);
+    session._logger << "search reported jobs from: " + args[0];
+    return {results};
+  }
+
+  std::any jobListingReport(Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
+  {
+    auto job = new Domain::Job::JobOpening;
+    auto results = job->getJobListingReport(args[0]);
+    session._logger << "Got Job report from: " + args[0];
+    return {results};
+  }
+
+  std::any removeJobListing(Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
+  {
+    auto job = new Domain::Job::JobOpening;
+    auto results = job->removeJobListing(args[0]);
+    session._logger << "Removing job listing with ID: " + args[0] + "\nWith Reason: " + args[1];
+    return {results};
+  }
+
 }
 
 namespace Domain::Session
@@ -109,6 +160,9 @@ namespace Domain::Session
 
   EmployerSession::EmployerSession(const AccountCredentials & credentials) : SessionBasic("Employer", credentials)
   {
+    _actionDispatch = {{"List Jobs", listJobs },
+                      {"Get Job Listing report", jobListingReport },
+                      {"Remove Job Listing", removeJobListing}};
 
   }
 

@@ -24,6 +24,14 @@ namespace TechnicalServices::Persistence
       AccountCredentials          findCredentialsByName( const std::string & name ) override;  // Returns credentials for specified user, throws NoSuchUser if user not found
       std::vector<AccountCredentials> findReportedUsers(std::string date) override;
       bool removeAccount(std::string accountID) override;
+      AccountCredentials findCredentialsByID(const std::string & ID) override;
+      std::string findUserReport(const std::string & accountID) override;
+      std::string setUsername(std::string accountID, std::string username) override;
+      std::string setPassword(std::string accountID, std::string password) override;
+      std::vector<JobCredentials> listJobs(std::string company) override;
+      std::string getJobListingReport(std::string jobID) override;
+      std::string removeJobListing(std::string jobID) override;
+
       // Adaptation Data read only access.  Adaptation data is a Key/Value pair
       const std::string & operator[]( const std::string & key ) const override;
 

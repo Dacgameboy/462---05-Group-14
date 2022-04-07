@@ -93,7 +93,25 @@ namespace TechnicalServices::Persistence
         {"Chris",       "manidk462",   {"JobSeeker"            },       "000000002"},
       };
 
+      std::vector<JobCredentials> jobListings =
+      {
+      // employer        position         jobID       status
+
+        {"Amazon", "Software Engineer",  "1234", "Unavailable"},
+        {"Google", "Software Engineer",  "123452", "Available"},
+        {"Facebook", "Software Engineer",  "123453", "Available"},
+        {"Twitter", "Software Engineer",  "123454", "Available"},
+        {"Amazon", "Warehouse manager",  "123455", "Available"},
+        {"Amazon", "HR Manager",  "123456", "Available"},
+        {"Amazon", "Call Center Rep",  "123457", "Available"},
+        {"Bank of America", "Financial consultant",  "123458", "Available"},
+        {"Amazon", "QA Analyst",  "123459", "Unavailable"}
+      };
   };
+
+  static std::vector<UserReport> userReports = { {"000000001", "activity report:\nCreated Account 4/5/2022"} ,
+                                               {"000000002", "activity report"}  };
+
 
   static UserBase Users;
 
@@ -148,8 +166,81 @@ namespace TechnicalServices::Persistence
     throw PersistenceHandler::NoSuchUser( message );
   }
 
+  AccountCredentials SimpleDB::findCredentialsByID(const std::string & ID)
+  {
+    for( const auto & user : Users.storedUsers ) if( user.accountID == ID ) return user;
+
+    // Name not found, log the error and throw something
+    std::string message = __func__;
+    message += " attempt to find user \"" + ID + "\" failed";
+
+    _logger << message;
+    throw PersistenceHandler::NoSuchUser( message );
+  }
+
+  std::string SimpleDB::findUserReport(const std::string & accountID)
+  {
+
+     for (UserReport report : userReports)
+     {
+        if (report.account_ID == accountID)
+             return report.report;
+
+     }
+     return "no report found";
+  }
+
+  std::string SimpleDB::setUsername(std::string accountID, std::string username)
+  {
+    for(auto user = Users.storedUsers.begin(); user != Users.storedUsers.end(); ++user)
+    {
+      if( user->accountID == accountID )
+      {
+        user->userName = username;
+        return "Success\n";
+      }
+    }
+    return "FAILED";
+  }
+
+  std::string SimpleDB::setPassword(std::string accountID, std::string password)
+  {
+    for(auto user = Users.storedUsers.begin(); user != Users.storedUsers.end(); ++user)
+    {
+      if( user->accountID == accountID )
+      {
+        user->passPhrase = password;
+        return "Success\n";
+      }
+    }
+    return "FAILED";
+  }
+
+  std::vector<JobCredentials> SimpleDB::listJobs(std::string company)
+  {
+      company = "";
+      return Users.jobListings;
+  }
 
 
+  std::string SimpleDB::getJobListingReport(std::string jobID)
+  {
+    std::string job = jobID;
+    return "\nthe employer is no longer considering any applicants for this position. \n\n";
+  }
+
+  std::string SimpleDB::removeJobListing(std::string jobID)
+  {
+    for(auto user = Users.jobListings.begin(); user != Users.jobListings.end(); ++user)
+    {
+      if( user->jobID == jobID)
+      {
+        Users.jobListings.erase(user);
+        return "Success";
+      }
+    }
+    return "FAILED";
+  }
 
   const std::string & SimpleDB::operator[]( const std::string & key ) const
   {
