@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "TechnicalServices/Persistence/PersistenceHandler.hpp"
 
 using TechnicalServices::Persistence::AccountCredentials;
@@ -13,6 +14,8 @@ namespace Domain::Account
   class AccountHandler
   {
     public:
+
+      
 
       virtual bool removeAccount(std::string accountID) = 0;//removes an account based on accountID
       virtual std::vector<AccountCredentials> listReportedUsers(std::string date) = 0;//lists reported users taking in a certain day. (date sort not implemented yet)
@@ -29,6 +32,8 @@ namespace Domain::Account
       AccountHandler & operator=( const AccountHandler &  rhs ) = default;  // copy assignment
       AccountHandler & operator=(       AccountHandler && rhs ) = default;  // move assignment
       static AccountHandler & instance();
+
+    private:
 
   };
 

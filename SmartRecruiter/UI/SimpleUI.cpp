@@ -104,7 +104,9 @@ namespace UI
         std::cin >> menuSelection;
       } while( menuSelection > actions.size() );
 
-      if( menuSelection == actions.size() ) break;
+      if( menuSelection == actions.size() ){
+        break;
+      }
 
       selectedCommand = actions[menuSelection];
       _logger << "Command selected \"" + selectedCommand + '"';
@@ -124,7 +126,7 @@ namespace UI
 
         auto results = sessionControl->executeAction( selectedCommand, parameters );
         if( results.has_value() )
-        {
+        {sessionControl->logout();
           _logger << "Received List of Accounts";
           std::cout << "\nUsername        Account ID  \n";
           for(AccountCredentials credential :std::any_cast<std::vector<AccountCredentials>>( results ))
@@ -210,6 +212,6 @@ namespace UI
       else sessionControl->executeAction( selectedCommand, {} );
     } while( true );
 
-    _logger << "Ending session and terminating";
+    sessionControl->logout();
   }
 }
