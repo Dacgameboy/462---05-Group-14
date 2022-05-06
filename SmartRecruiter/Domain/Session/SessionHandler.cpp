@@ -16,7 +16,6 @@ namespace Domain::Session
   SessionHandler::~SessionHandler() noexcept = default;
 
 
-
   std::unique_ptr<SessionHandler> SessionHandler::createSession(const AccountCredentials & credentials)
   {
    try

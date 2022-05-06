@@ -23,6 +23,7 @@ namespace Domain::Session
 
       std::vector<std::string> getActions() override;
       std::any executeAction( const std::string & action, const std::vector<std::string> & args ) override;
+      void logout() override;
 
 
       ~SessionBasic() noexcept override = 0;

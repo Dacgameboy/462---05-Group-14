@@ -30,6 +30,7 @@ namespace Domain::Session
       //Operations
       virtual std::vector<std::string> getActions() = 0;//gets action options taking in session type
       virtual std::any executeAction(const std::string & action, const std::vector<std::string> & args) = 0;//executes a selected action
+      virtual void logout() = 0; //logs out the user.
 
       virtual ~SessionHandler() noexcept = 0;
 

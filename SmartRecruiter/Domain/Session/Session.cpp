@@ -120,6 +120,11 @@ namespace Domain::Session
     return availableActions;
   }
 
+  void SessionBasic::logout()
+  {
+    _logger << "Ending session and terminating";
+  }
+
   std::any SessionBasic::executeAction( const std::string & action, const std::vector<std::string> & args )
   {
     std::string parameters;
