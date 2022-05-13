@@ -36,15 +36,6 @@ namespace Domain::Account
         return a_methods;
       }
 
-      static std::unique_ptr<Account> Create(std::string name)
-      {
-        if(auto it = a_methods.find(name); it != a_methods.end())
-        {
-          return it->second();
-        }
-        return nullptr;
-      }
-
       bool removeAccount(std::string accountID) override
       {
         auto &          persistentData    = TechnicalServices::Persistence::PersistenceHandler::instance();
@@ -91,9 +82,4 @@ namespace Domain::Account
 
   inline Account::~Account() noexcept
   {}
-
-  //struct StudentAccount : Account{};
-  //struct EmployeeAccount      : Account{};
-  //struct ExpertAccount     : Account{};
-  //struct ManagementAccount       : Account{};
 }
