@@ -22,7 +22,7 @@ namespace
 
   std::any listReportedUsers ( Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
   {
-    auto account = Domain::Account::Account::Create("Student");
+    auto account = new Domain::Account::Account;
     auto results = account->listReportedUsers(args[0]);
     session._logger << "search reported users from: " + args[0];
     return {results};
@@ -31,7 +31,7 @@ namespace
   std::any removeAccount ( Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
   {
 
-    auto account = Domain::Account::Account::Create("Student");
+    auto account = new Domain::Account::Account;
     auto results = account->removeAccount(args[0]);
     if(results) session._logger << "Removed account with ID: " + args[0] + " with justification: " + args[1];
     return {results};
@@ -39,7 +39,7 @@ namespace
 
   std::any getAccountInfo( Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
   {
-    auto account = Domain::Account::Account::Create("Student");
+    auto account = new Domain::Account::Account;
     auto results = account->getAccountInfo(args[0]);
     session._logger << "Retrieved Account info with ID: " + args[0];
     return {results};
@@ -47,7 +47,7 @@ namespace
 
   std::any getUserReport( Domain::Session::SessionBasic & session, const std::vector<std::string> & args )
   {
-    auto account = Domain::Account::Account::Create("Student");
+    auto account = new Domain::Account::Account;
     auto results = account->getUserReport(args[0]);
     session._logger << "Retrieved user report of ID: " + args[0];
     return {results};
@@ -55,7 +55,7 @@ namespace
 
   std::any setUsername(Domain::Session::SessionBasic & session, const std::vector<std::string> & args)
   {
-    auto account = Domain::Account::Account::Create("Student");
+    auto account = new Domain::Account::Account;
     auto results = account->setUsername(args[0]);
     session._logger << "Changed Username to: " + args[0];
     return {results};
@@ -63,7 +63,7 @@ namespace
 
   std::any setPassword(Domain::Session::SessionBasic & session, const std::vector<std::string> & args)
   {
-    auto account = Domain::Account::Account::Create("Student");
+    auto account = new Domain::Account::Account;
     auto results = account->setPassword(args[0]);
     session._logger << "Changed Password to: " + args[0];
     return {results};
