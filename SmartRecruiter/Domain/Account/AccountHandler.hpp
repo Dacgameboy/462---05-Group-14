@@ -15,7 +15,6 @@ namespace Domain::Account
   {
     public:
 
-      
 
       virtual bool removeAccount(std::string accountID) = 0;//removes an account based on accountID
       virtual std::vector<AccountCredentials> listReportedUsers(std::string date) = 0;//lists reported users taking in a certain day. (date sort not implemented yet)
