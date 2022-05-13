@@ -2,7 +2,7 @@
 namespace Domain::Account
 {
   std::map<std::string, Account::accountCreateMethod> Domain::Account::Account::a_methods;
-  
+
   struct StudentAccount : public Account
   {
     //StudentAccount();
@@ -59,6 +59,6 @@ namespace Domain::Account
       return "Management";
     }
 
-    //inline static bool a_registered = Account::registerType(ManagementAccount::getName(), ManagementAccount::createMethod);
+    inline static bool a_registered = Account::registerType(ManagementAccount::getName(), ManagementAccount::createMethod);
   };
 }
